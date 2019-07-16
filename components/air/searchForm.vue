@@ -215,7 +215,7 @@ export default {
 
         // 如果合法  传参并进行页面的跳转
         if (valid) {
-          this.$router.push({ path: "/air/flights", query: this.searchForm });
+          this.$router.push({ path: "air/flights", query: this.searchForm });
         }
       });
     }
