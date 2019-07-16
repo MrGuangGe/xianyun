@@ -88,64 +88,65 @@ export default {
 
     // 出发城市输入框获得焦点时触发
     // value 是选中的值，callback是回调函数，接收要展示的列表
-    queryDepartSearch(value, callback) {
-      if (!value.trim()) {
-        // 不显示下拉列表
-        callback([]);
-        return;
-      }
-      // 调用actions中的方法获取城市的信息
-      this.$store.dispatch("air/getCityInfo", value)
-        .then(res => {
-          // console.log(res)
-          // 把获取到的城市循环遍历
-          const newArr = res.map(v => {
-            return {
-              // 解构数组对象中的每一个值
-              ...v,
-              // 在这些对象中添加一个value值 并且把市字去掉
-              value: v.name.replace("市", "")
-            };
-          });
-          // 回调函数中的参数必须是一个数组
-          // 数组中每一项必须是一个对象，对象中必须包含value属性
-          callback(newArr);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+    queryDepartSearch(val, callback) {
+      // 调用获取城市信息的函数
+      this.queryCityInfo(val).then(arr => {
+        if (arr.length > 0) {
+          // 默认选中第一个
+          this.searchForm.departCity = arr[0].value;
+          this.searchForm.departCode = arr[0].sort;
+        }
+        callback(arr);
+      });
     },
 
     // 目标城市输入框获得焦点时触发
     // value 是选中的值，callback是回调函数，接收要展示的列表
-    queryDestSearch(value, callback) {
-      if (!value.trim()) {
-        // 不显示下拉列表
-        callback([]);
-        return;
-      }
-      // 调用actions中的方法获取城市的信息
-      this.$store.dispatch("air/getCityInfo", value)
-        .then(res => {
-          // console.log(res)
-          // 把获取到的城市循环遍历
-          const newArr = res.map(v => {
-            return {
-              // 解构数组对象中的每一个值
-              ...v,
-              // 在这些对象中添加一个value值 并且把市字去掉
-              value: v.name.replace("市", "")
-            };
-          });
-          // 回调函数中的参数必须是一个数组
-          // 数组中每一项必须是一个对象，对象中必须包含value属性
-          callback(newArr);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+    queryDestSearch(val, callback) {
+      // 调用获取城市信息的函数
+      this.queryCityInfo(val).then(arr => {
+        if (arr.length > 0) {
+          // 默认选中第一个
+          this.searchForm.destCity = arr[0].value;
+          this.searchForm.destCode = arr[0].sort;
+        }
+        callback(arr);
+      });
     },
 
+    // 封装有个函数获取城市信息
+    queryCityInfo(val) {
+      // return回去 谁调用了就会返回一个promise
+      return new Promise((resolve, reject) => {
+        if (!val.trim()) {
+          // vlaue值为空的话 调用成功的回调函数resolve 不显示下拉列表
+          resolve([]);
+          return;
+        }
+        // 调用actions中的方法获取城市的信息
+        this.$store
+          .dispatch("air/getCityInfo", val)
+          .then(arr => {
+            // console.log(arr)
+            // 把获取到的城市循环遍历
+            const newArr = arr.map(v => {
+              return {
+                // 解构数组对象中的每一个值
+                ...v,
+                // 在这些对象中添加一个value值 并且把市字去掉
+                value: v.name.replace("市", "")
+              };
+            });
+            // vlaue值不为空的话 调用成功的回调函数resolve 参数为一个数组
+            // 回调函数中的参数必须是一个数组 数组中每一项必须是一个对象，对象中必须包含value属性
+            // 默认选中第一个
+            resolve(newArr);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      });
+    },
     // 出发城市下拉选择时触发
     handleDepartSelect(item) {
       // console.log(item)
