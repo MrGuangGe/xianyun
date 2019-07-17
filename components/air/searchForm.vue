@@ -221,12 +221,15 @@ export default {
 
       // 点击搜索按钮时把数据保存到本地
       // 1、先看下本地是否存在了数据 如果存在先把它拿下来
-      let oldArr = JSON.parse(localStorage.getItem("airs_data") || "[]");
+      let arr = JSON.parse(localStorage.getItem("airs_data") || "[]");
       // 2、点击搜索按钮时把数据保存到本地上
-      oldArr.unshift(this.searchForm);
-      // 限制历史记录的显示数量
-      if (oldArr.length > 5) oldArr.length = 5;
-      localStorage.setItem("airs_data", JSON.stringify(oldArr));
+      arr.unshift(this.searchForm);
+      // 3、数组去重
+      let obj = new Set(arr)
+      let newArr = [...obj]
+      // 4、限制历史记录的显示数量
+      if (newArr.length > 5) newArr.length = 5;
+      localStorage.setItem("airs_data", JSON.stringify(newArr));
     }
   },
   mounted() {}
