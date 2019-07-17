@@ -4,7 +4,7 @@
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
         <!-- 过滤条件 -->
-        <FlightsFilters :data="cacheFlightsData" @changAirTicketList="changAirTicketList"/>
+        <FlightsFilters :data="cacheFlightsData" @changAirTicketList="changAirTicketList" />
 
         <!-- 航班头部布局 -->
         <FlightsListHead />
@@ -56,7 +56,7 @@ export default {
         options: {}
       },
       // 缓存一份接口返回最初的数据，一旦赋值之后永远不能修改
-      cacheFlightsData:  {
+      cacheFlightsData: {
         flights: [],
         info: {},
         options: {}
@@ -76,32 +76,52 @@ export default {
       this.pageIndex = val;
     },
     // 下面的方法将会传递给子组件
-    changAirTicketList(arr){
+    changAirTicketList(arr) {
       // console.log(123)
       // 把子组件传递过里的数组重新赋值给this.flightsData.flights
-      this.flightsData.flights = arr
+      this.flightsData.flights = arr;
+    },
+    // 封装一个获取所有机票数据的一个函数
+    getAllAirTicketData() {
+      // 发送请求获取所有的机票的详细信息
+      this.$axios({
+        url: "/airs",
+        method: "GET",
+        params: this.$route.query
+      })
+        .then(res => {
+          // console.log(res.data);
+          this.flightsData = res.data;
+          // 上面的值是一样的，只不过一旦被赋值之后，不能被修改。通过{...}的方式保存返回的数据就不会与上面冲突了
+          this.cacheFlightsData = { ...res.data };
+          // 总条数
+          this.count = res.data.total;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   mounted() {
-    // 发送请求获取所有的机票的详细信息
-    this.$axios({
-      url: "/airs",
-      method: "GET",
-      params: this.$route.query
-    })
-      .then(res => {
-        // console.log(res.data);
-        this.flightsData = res.data;
-        // 上面的值是一样的，只不过一旦被赋值之后，不能被修改。通过{...}的方式保存返回的数据就不会与上面冲突了
-        this.cacheFlightsData = {...res.data}
-        // 总条数
-        this.count = res.data.total;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    // 调用获取所有机票数据的函数
+    this.getAllAirTicketData();
   },
-  computed:{
+  // watch: {
+  //   // 监听路由的变化，听一个页面之间的跳转不会重新加载组件
+  //   // 有两个方法可以实现路由变化租价重新加载
+  //   // 方法1：监听$route
+  //   $route() {
+  //     // 调用获取所有机票数据的函数
+  //     this.getAllAirTicketData();
+  //   }
+  // },
+  // 方法2：使用导航守卫中的 beforeRouteUpdate 来实现让组件重新加载
+  beforeRouteUpdate(to, from, next) {
+    next();
+    // 调用获取所有机票数据的函数
+    this.getAllAirTicketData();
+  },
+  computed: {
     // 使用computed属性实现分页功能
     // 根据页数切割当前数据
     airTicketList() {
