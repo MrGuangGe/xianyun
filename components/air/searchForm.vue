@@ -218,6 +218,15 @@ export default {
           this.$router.push({ path: "air/flights", query: this.searchForm });
         }
       });
+
+      // 点击搜索按钮时把数据保存到本地
+      // 1、先看下本地是否存在了数据 如果存在先把它拿下来
+      let oldArr = JSON.parse(localStorage.getItem("airs_data") || "[]");
+      // 2、点击搜索按钮时把数据保存到本地上
+      oldArr.unshift(this.searchForm);
+      // 限制历史记录的显示数量
+      if (oldArr.length > 5) oldArr.length = 5;
+      localStorage.setItem("airs_data", JSON.stringify(oldArr));
     }
   },
   mounted() {}

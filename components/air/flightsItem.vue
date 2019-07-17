@@ -18,7 +18,7 @@
             </el-col>
             <el-col :span="8" class="flight-airport">
               <strong>{{data.arr_time}}</strong>
-              <span>{{data.des_airport_name}}{{data.des_airport_quay}}</span>
+              <span>{{data.dst_airport_name}}{{data.dst_airport_quay}}</span>
             </el-col>
           </el-row>
         </el-col>
