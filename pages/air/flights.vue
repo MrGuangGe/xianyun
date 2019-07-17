@@ -4,7 +4,7 @@
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
         <!-- 过滤条件 -->
-        <FlightsFilters :data="flightsData" @changAirTicketList="changAirTicketList"/>
+        <FlightsFilters :data="cacheFlightsData" @changAirTicketList="changAirTicketList"/>
 
         <!-- 航班头部布局 -->
         <FlightsListHead />
@@ -55,6 +55,12 @@ export default {
         // 头部过滤用到的数据
         options: {}
       },
+      // 缓存一份接口返回最初的数据，一旦赋值之后永远不能修改
+      cacheFlightsData:  {
+        flights: [],
+        info: {},
+        options: {}
+      },
       pageIndex: 1, // 当前页码
       pageSize: 5, // 显示条数
       count: 0 // 总条数
@@ -86,6 +92,8 @@ export default {
       .then(res => {
         // console.log(res.data);
         this.flightsData = res.data;
+        // 上面的值是一样的，只不过一旦被赋值之后，不能被修改。通过{...}的方式保存返回的数据就不会与上面冲突了
+        this.cacheFlightsData = {...res.data}
         // 总条数
         this.count = res.data.total;
       })
