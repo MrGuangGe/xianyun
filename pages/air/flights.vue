@@ -4,7 +4,7 @@
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
         <!-- 过滤条件 -->
-        <div></div>
+        <FlightsFilters />
 
         <!-- 航班头部布局 -->
         <FlightsListHead />
@@ -16,12 +16,13 @@
       <!-- 侧边栏 -->
       <div class="aside">
         <!-- 侧边栏组件 -->
+        <FlightsAside />
       </div>
     </el-row>
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="pageNum"
+      :current-page="pageIndex"
       :page-sizes="[5, 10, 15]"
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
@@ -33,11 +34,15 @@
 <script>
 import FlightsListHead from "@/components/air/flightsListHead.vue";
 import FlightsItem from "@/components/air/flightsItem.vue";
+import FlightsFilters from "@/components/air/flightsFilters.vue";
+import FlightsAside from "@/components/air/flightsAside.vue";
 
 export default {
   components: {
     FlightsListHead,
-    FlightsItem
+    FlightsItem,
+    FlightsFilters,
+    FlightsAside
   },
   data() {
     return {
@@ -52,8 +57,8 @@ export default {
         // 航班总条数
         // total
       },
-      airTicketList: [],
-      pageNum: 1, // 当前页码
+      // airTicketList: [],
+      pageIndex: 1, // 当前页码
       pageSize: 5, // 显示条数
       count: 0 // 总条数
     };
@@ -62,21 +67,21 @@ export default {
     // 切换显示条数时触发
     handleSizeChange(val) {
       this.pageSize = val;
-      this.setAirTicketList()
+      // this.setAirTicketList()
     },
     // 切换当前页码时触发
     handleCurrentChange(val) {
-      this.pageNum = val;
-      this.setAirTicketList()
+      this.pageIndex = val;
+      // this.setAirTicketList()
     },
-    // 根据页数切割当前数据
-    setAirTicketList() {
-      // 从索引0开始截取 向后截取n位
-      this.airTicketList = this.flightsData.flights.slice(
-        (this.pageNum - 1) * this.pageSize,
-        this.pageSize * this.pageNum
-      );
-    }
+    // // 根据页数切割当前数据
+    // setAirTicketList() {
+    //   // 从索引0开始截取 向后截取n位
+    //   this.airTicketList = this.flightsData.flights.slice(
+    //     (this.pageIndex - 1) * this.pageSize,
+    //     this.pageSize * this.pageIndex
+    //   );
+    // }
   },
   mounted() {
     // 发送请求获取所有的机票的详细信息
@@ -91,11 +96,22 @@ export default {
         // 总条数
         this.count = res.data.total;
         // 第一页数据
-        this.airTicketList = res.data.flights.slice(0, this.pageSize);
+        // this.airTicketList = res.data.flights.slice(0, this.pageSize);
       })
       .catch(err => {
         console.log(err);
       });
+  },
+  computed:{
+    // 使用computed属性实现分页功能
+    // 根据页数切割当前数据
+    airTicketList() {
+      // 从当前页码的索引开始截取 向后截取n位
+      return this.flightsData.flights.slice(
+        (this.pageIndex - 1) * this.pageSize,
+        this.pageSize * this.pageIndex
+      );
+    }
   }
 };
 </script>
