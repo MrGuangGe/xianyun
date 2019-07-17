@@ -4,7 +4,7 @@
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
         <!-- 过滤条件 -->
-        <FlightsFilters :data="flightsData"/>
+        <FlightsFilters :data="flightsData" @changAirTicketList="changAirTicketList"/>
 
         <!-- 航班头部布局 -->
         <FlightsListHead />
@@ -69,6 +69,10 @@ export default {
     handleCurrentChange(val) {
       this.pageIndex = val;
     },
+    // 下面的方法将会传递给子组件
+    changAirTicketList(){
+      console.log(123)
+    }
   },
   mounted() {
     // 发送请求获取所有的机票的详细信息

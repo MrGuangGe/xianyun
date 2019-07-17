@@ -85,7 +85,10 @@ export default {
     handleFlightTimes(value) {},
 
     // 选择航空公司时候触发
-    handleCompany(value) {},
+    handleCompany(value) {
+        // 通过this.$emit来接收父组件传递过来的方法
+        this.$emit("changAirTicketList")
+    },
 
     // 选择机型时候触发
     handleAirSize(value) {},
