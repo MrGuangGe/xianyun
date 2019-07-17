@@ -79,10 +79,28 @@ export default {
   },
   methods: {
     // 选择机场时候触发
-    handleAirport(value) {},
+    handleAirport(value) {
+      let newArr = this.data.flights.filter(val => {
+        // 条件满足返回到一个新的数组
+        return val.org_airport_name === value;
+      });
+      // 通过this.$emit来调用父组件传递过来的方法,顺便把过滤好的新数组传递给父组件
+      this.$emit("changAirTicketList", newArr);
+    },
 
     // 选择出发时间时候触发
-    handleFlightTimes(value) {},
+    handleFlightTimes(value) {
+      // 通过都好切割这样的时间  6,12
+      let [from, to] = value.split(",");
+      let newArr = this.data.flights.filter(val => {
+        // 通过冒号切割与value值匹配的时间
+        let [start] = val.dep_time.split(":");
+        // 条件满足返回到一个新的数组
+        return from <= start && start < to;
+      });
+      // 通过this.$emit来调用父组件传递过来的方法,顺便把过滤好的新数组传递给父组件
+      this.$emit("changAirTicketList", newArr);
+    },
 
     // 选择航空公司时候触发
     handleCompany(value) {
@@ -95,10 +113,25 @@ export default {
     },
 
     // 选择机型时候触发
-    handleAirSize(value) {},
+    handleAirSize(value) {
+      let newArr = this.data.flights.filter(val => {
+        // 条件满足返回到一个新的数组
+        return val.plane_size === value;
+      });
+      // 通过this.$emit来调用父组件传递过来的方法,顺便把过滤好的新数组传递给父组件
+      this.$emit("changAirTicketList", newArr);
+    },
 
     // 撤销条件时候触发
-    handleFiltersCancel() {}
+    handleFiltersCancel() {
+      // 清空列表
+      this.airport = "";
+      this.flightTimes = "";
+      this.company = "";
+      this.airSize = "";
+      // 把一份没有处理过的数据传递回去
+      this.$emit("changAirTicketList", this.data.flights);
+    }
   }
 };
 </script>
