@@ -19,12 +19,12 @@
       </el-col>
       <el-col :span="4">
         <el-select size="mini" v-model="flightTimes" placeholder="起飞时间" @change="handleFlightTimes">
-          <el-option 
+          <el-option
             v-for="(item,index) in data.options.flightTimes"
             :key="index"
             :label="`${item.from}:00--${item.to}:00`"
-            :value="`${item.from},${item.to}`">
-          </el-option>
+            :value="`${item.from},${item.to}`"
+          ></el-option>
         </el-select>
       </el-col>
       <el-col :span="4">
@@ -39,12 +39,12 @@
       </el-col>
       <el-col :span="4">
         <el-select size="mini" v-model="airSize" placeholder="机型" @change="handleAirSize">
-          <el-option 
-          v-for="(item,index) in airSizeList" 
-          :key="index" 
-          :label="item.type" 
-          :value="item.size">
-          </el-option>
+          <el-option
+            v-for="(item,index) in airSizeList"
+            :key="index"
+            :label="item.type"
+            :value="item.size"
+          ></el-option>
         </el-select>
       </el-col>
     </el-row>
@@ -86,8 +86,12 @@ export default {
 
     // 选择航空公司时候触发
     handleCompany(value) {
-        // 通过this.$emit来接收父组件传递过来的方法
-        this.$emit("changAirTicketList")
+      let newArr = this.data.flights.filter(val => {
+        // 条件满足返回到一个新的数组
+        return val.airline_name === value;
+      });
+      // 通过this.$emit来调用父组件传递过来的方法,顺便把过滤好的新数组传递给父组件
+      this.$emit("changAirTicketList", newArr);
     },
 
     // 选择机型时候触发

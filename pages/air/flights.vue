@@ -70,8 +70,10 @@ export default {
       this.pageIndex = val;
     },
     // 下面的方法将会传递给子组件
-    changAirTicketList(){
-      console.log(123)
+    changAirTicketList(arr){
+      // console.log(123)
+      // 把子组件传递过里的数组重新赋值给this.flightsData.flights
+      this.flightsData.flights = arr
     }
   },
   mounted() {
