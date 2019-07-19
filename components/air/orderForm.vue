@@ -185,7 +185,11 @@ export default {
       this.$axios({
         url: "/airorders",
         method: "POST",
-        data
+        data,
+        // 设置授权的头部信息
+        headers:{
+            Authorization:`Bearer ${this.$store.state.user.userInfo.token}`
+        }
       }).then(res=>{
           console.log(res)
       })
