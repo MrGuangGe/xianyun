@@ -104,6 +104,9 @@ export default {
       .then(res => {
         // console.log(res.data)
         this.ticketData = res.data;
+
+        // 调用父组件传递过来的事件，并且把请求回来的数据传递过去
+        this.$emit("getTicketData", res.data)
       })
       .catch(err => {
         console.log(err);

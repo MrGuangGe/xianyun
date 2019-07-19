@@ -3,12 +3,12 @@
     <el-row type="flex" justify="space-between">
       <!-- 订单表单 -->
       <div class="main">
-        <OrderForm />
+        <OrderForm @getTicketData="getTicketData" />
       </div>
 
       <!-- 侧边栏 -->
       <div class="aside">
-        <!-- <OrderAside />     -->
+        <OrderAside :data="ticketData" />
       </div>
     </el-row>
   </div>
@@ -18,9 +18,23 @@
 import OrderForm from "@/components/air/orderForm.vue";
 import OrderAside from "@/components/air/orderAside.vue";
 export default {
+  data() {
+    return {
+      ticketData: {
+          seat_infos:{}
+      }
+    };
+  },
   components: {
-    OrderForm
-    // OrderAside
+    OrderForm,
+    OrderAside
+  },
+  methods: {
+    // 这个事件传递给子组件,以获取回来需要使用到的数据
+    getTicketData(data) {
+    // console.log(data);
+    this.ticketData = data
+    }
   }
 };
 </script>
