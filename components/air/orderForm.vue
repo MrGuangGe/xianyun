@@ -31,7 +31,7 @@
       <h2>保险</h2>
       <div>
         <div class="insurance-item" v-for="(item,index) in ticketData.insurances" :key="index">
-          <el-checkbox :label='`${item.type}：￥${item.price}/份×1  最高赔付${item.compensation}`' border></el-checkbox>
+          <el-checkbox :label="`${item.type}：￥${item.price}/份×1  最高赔付${item.compensation}`" border></el-checkbox>
         </div>
       </div>
     </div>
@@ -41,11 +41,11 @@
       <div class="contact">
         <el-form label-width="60px">
           <el-form-item label="姓名">
-            <el-input></el-input>
+            <el-input v-model="contactName"></el-input>
           </el-form-item>
 
           <el-form-item label="手机">
-            <el-input placeholder="请输入内容">
+            <el-input placeholder="请输入内容" v-model="contactPhone">
               <template slot="append">
                 <el-button @click="handleSendCaptcha">发送验证码</el-button>
               </template>
@@ -53,7 +53,7 @@
           </el-form-item>
 
           <el-form-item label="验证码">
-            <el-input></el-input>
+            <el-input v-model="captcha"></el-input>
           </el-form-item>
         </el-form>
         <el-button type="success" class="submit" @click="handleSubmit">提交订单</el-button>
@@ -73,16 +73,16 @@ export default {
           id: ""
         }
       ],
-      insurances: [],   // 保险id
-      contactName: "",  // 用户名字
+      insurances: [], // 保险id
+      contactName: "", // 用户名字
       contactPhone: "", // 用户电话
-      invoice: false,   // 是否需要保险
-      captcha: "",      // 验证码
-      seat_xid: "",     // 座位id
-      air: "",          // 航班id
-      ticketData:{
-          insurances:[], // 保险的具体信息
-          seat_infos:{}  // 座位的具体信息
+      invoice: false, // 是否需要保险
+      captcha: "", // 验证码
+      seat_xid: "", // 座位id
+      air: "", // 航班id
+      ticketData: {
+        insurances: [], // 保险的具体信息
+        seat_infos: {} // 座位的具体信息
       }
     };
   },
@@ -96,13 +96,14 @@ export default {
       params: {
         seat_xid
       }
-    }).then(res => {
+    })
+      .then(res => {
         // console.log(res.data)
-        this.ticketData = res.data
+        this.ticketData = res.data;
       })
       .catch(err => {
-        console.log(err)
-      })
+        console.log(err);
+      });
   },
   methods: {
     // 添加乘机人
@@ -119,7 +120,36 @@ export default {
     },
 
     // 发送手机验证码
-    handleSendCaptcha() {},
+    handleSendCaptcha() {
+      const phone = this.contactPhone;
+      // 如果用户名为空 则会弹出下面的提示框
+      if (!phone.trim()) {
+        this.$confirm("手机号不能为空！", "提示", {
+          confirmButtonText: "确定",
+          type: "warning",
+          showCancelButton: false,
+          center: true
+        });
+        return;
+      }
+      // 用户名存在的话就发送请求 请求验证码
+      if (phone.trim()) {
+        // 调用actions里面的方法 并把手机号传过去
+        this.$store.dispatch("user/sendCaptcha", phone)
+          .then(res => {
+            // console.log(res)  // 当前输出的为验证码
+            this.$confirm(`验证码为：${res}`, "提示", {
+              confirmButtonText: "确定",
+              type: "success",
+              showCancelButton: false,
+              center: true
+            });
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+    },
 
     // 提交订单
     handleSubmit() {}
