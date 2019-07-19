@@ -1,13 +1,18 @@
 // 默认数据
 export const state = () => {
     return {
-
+        // 机票信息
+        ticketData: {
+            seat_infos: {}
+        }
     }
 }
 
 // 发送同步请求
 export const mutations = {
-
+    setTicketData(state, data) {
+        state.ticketData = data
+    }
 }
 
 // 发送异步请求
@@ -21,16 +26,12 @@ export const actions = {
                 name: value
             }
         })
-        .then(res=>{
-            // console.log(res)
-            return res.data.data
-        })
-        .catch(err=>{
-            console.log(err)
-        })
-    },
-    // 购买飞机票
-    buyAirTicket(store,data){
-       
+            .then(res => {
+                // console.log(res)
+                return res.data.data
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 }

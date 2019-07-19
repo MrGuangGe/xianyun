@@ -3,12 +3,20 @@
     <el-row type="flex" justify="space-between">
       <!-- 订单表单 -->
       <div class="main">
-        <OrderForm @getTicketData="getTicketData" />
+        <!-- 父子传递数据 -->
+        <!-- <OrderForm @getTicketData="getTicketData" /> -->
+
+        <!-- 通过vuex进行数据的传递 -->
+        <OrderForm />
       </div>
 
       <!-- 侧边栏 -->
       <div class="aside">
-        <OrderAside :data="ticketData" />
+        <!-- 父子传递数据 -->
+        <!-- <OrderAside :data="ticketData" /> -->
+
+        <!-- 通过vuex进行数据的传递 -->
+        <OrderAside :data="$store.state.air.ticketData" />
       </div>
     </el-row>
   </div>
@@ -20,22 +28,23 @@ import OrderAside from "@/components/air/orderAside.vue";
 export default {
   data() {
     return {
-      ticketData: {
-          seat_infos:{}
-      }
+      // 机票订单的信息
+      // ticketData: {
+      //     seat_infos: {}
+      // }
     };
   },
   components: {
     OrderForm,
     OrderAside
   },
-  methods: {
-    // 这个事件传递给子组件,以获取回来需要使用到的数据
-    getTicketData(data) {
-    // console.log(data);
-    this.ticketData = data
-    }
-  }
+//   methods: {
+//     // 这个事件传递给子组件,以获取回来需要使用到的数据
+//     getTicketData(data) {
+//     // console.log(data);
+//     this.ticketData = data
+//     }
+//   }
 };
 </script>
 

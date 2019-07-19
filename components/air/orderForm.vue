@@ -106,7 +106,10 @@ export default {
         this.ticketData = res.data;
 
         // 调用父组件传递过来的事件，并且把请求回来的数据传递过去
-        this.$emit("getTicketData", res.data)
+        // this.$emit("getTicketData", res.data)
+
+        // 调用store中的方法 并且把请求回来的数据传递过去
+        this.$store.commit("air/setTicketData", res.data);
       })
       .catch(err => {
         console.log(err);
@@ -194,24 +197,24 @@ export default {
           message: "请输入手机验证码"
         }
       };
-      let valid = true
-      // 循环遍历 一个一个地进行验证  
+      let valid = true;
+      // 循环遍历 一个一个地进行验证
       Object.keys(rules).forEach(val => {
         // 有一项为空就立刻执行return停止
-        if(!valid) return
+        if (!valid) return;
         // 如果没有输入信息则会出现以下的弹框
         if (!rules[val].value.trim()) {
-          valid = false
+          valid = false;
           this.$message({
             type: "warning",
             message: rules[val].message
-          })
-          return
+          });
+          return;
         }
-      })
+      });
 
       // 有一项为空就立刻执行return停止
-      if(!valid) return
+      if (!valid) return;
 
       const data = {
         users: this.users,
