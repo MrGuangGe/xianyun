@@ -55,7 +55,9 @@ export default {
           this.$store.dispatch("user/login", this.loginForm)
             .then(res => {
               // 登录成功后跳转到首页
-              this.$router.push("/");
+              // this.$router.push("/");
+              // 登录成功后跳回到上一次浏览的地方
+              this.$router.back()
             })
             .catch(err => {
               console.log(err);
