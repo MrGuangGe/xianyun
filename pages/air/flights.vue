@@ -128,10 +128,7 @@ export default {
     // 根据页数切割当前数据
     airTicketList() {
       // 从当前页码的索引开始截取 向后截取n位
-      return this.flightsData.flights.slice(
-        (this.pageIndex - 1) * this.pageSize,
-        this.pageSize * this.pageIndex
-      );
+      return this.flightsData.flights.slice((this.pageIndex - 1) * this.pageSize, this.pageSize * this.pageIndex)
     }
   }
 };
