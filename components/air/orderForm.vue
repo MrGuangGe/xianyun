@@ -127,9 +127,9 @@ export default {
     choseInsurance(item) {
       // console.log(value)   // change事件输出的是布尔值 但我们需要的是保险的id号 所以要把保险的信息项传递过来
       // console.log(item)
-      // 获取到数组中的id所对应的索引  
+      // 获取到数组中的id所对应的索引
       let index = this.insurances.indexOf(item.id);
-      // 添加之前判断数组中是否存在了这个id 如果存在就先把它干掉再添加  
+      // 添加之前判断数组中是否存在了这个id 如果存在就先把它干掉再添加
       if (index > -1) {
         this.insurances.splice(index, 1);
       } else {
@@ -171,7 +171,28 @@ export default {
     },
 
     // 提交订单
-    handleSubmit() {}
+    handleSubmit() {
+      const data = {
+        users: this.users,
+        insurances: this.insurances,
+        contactName: this.contactName,
+        contactPhone: this.contactPhone,
+        invoice: false,
+        captcha: this.captcha,
+        seat_xid: this.$route.query.seat_xid,
+        air: this.$route.query.id,
+      }
+      this.$axios({
+        url: "/airorders",
+        method: "POST",
+        data
+      }).then(res=>{
+          console.log(res)
+      })
+      .catch(err=>{
+          console.log(err)
+      })
+    }
   }
 };
 </script>
