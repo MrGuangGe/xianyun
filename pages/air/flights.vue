@@ -80,6 +80,8 @@ export default {
       // console.log(123)
       // 把子组件传递过里的数组重新赋值给this.flightsData.flights
       this.flightsData.flights = arr;
+      this.count = arr.length
+      this.pageIndex = 1
     },
     // 封装一个获取所有机票数据的一个函数
     getAllAirTicketData() {
