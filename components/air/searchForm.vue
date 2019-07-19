@@ -221,15 +221,23 @@ export default {
 
       // 点击搜索按钮时把数据保存到本地
       // 1、先看下本地是否存在了数据 如果存在先把它拿下来
-      let arr = JSON.parse(localStorage.getItem("airs_data") || "[]");
+      let arr1 = JSON.parse(localStorage.getItem("airs_data") || "[]");
       // 2、点击搜索按钮时把数据保存到本地上
-      arr.unshift(this.searchForm);
-      // 3、数组去重
-      let obj = new Set(arr)
-      let newArr = [...obj]
-      // 4、限制历史记录的显示数量
-      if (newArr.length > 5) newArr.length = 5;
-      localStorage.setItem("airs_data", JSON.stringify(newArr));
+      arr1.unshift(this.searchForm);
+      // 3、把数组里的每一项对象转换成字符串 这样才可以进行比较
+      var arr2 = arr1.map(val =>{
+        return JSON.stringify(val)
+      })
+      // 4、进行数组去重的操作
+      let obj = new Set(arr2)
+      let arr3 = [...obj]
+      // 5、数组去重步骤完成后再重新把数组每一项对象转换成对象
+      var arr4 = arr3.map(val=>{
+        return JSON.parse(val)
+      })
+      // 6、限制历史记录的显示数量
+      if (arr4.length > 5) arr4.length = 5;
+      localStorage.setItem("airs_data", JSON.stringify(arr4));
     }
   },
   mounted() {}
