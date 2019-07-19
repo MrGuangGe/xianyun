@@ -31,7 +31,11 @@
       <h2>保险</h2>
       <div>
         <div class="insurance-item" v-for="(item,index) in ticketData.insurances" :key="index">
-          <el-checkbox :label="`${item.type}：￥${item.price}/份×1  最高赔付${item.compensation}`" border></el-checkbox>
+          <el-checkbox
+            :label="`${item.type}：￥${item.price}/份×1  最高赔付${item.compensation}`"
+            border
+            @change="choseInsurance(item)"
+          ></el-checkbox>
         </div>
       </div>
     </div>
@@ -73,7 +77,7 @@ export default {
           id: ""
         }
       ],
-      insurances: [], // 保险id
+      insurances: [], // 保险id的集合
       contactName: "", // 用户名字
       contactPhone: "", // 用户电话
       invoice: false, // 是否需要保险
@@ -117,6 +121,21 @@ export default {
     // 移除乘机人
     handleDeleteUser(index) {
       this.users.splice(index, 1);
+    },
+
+    // 获取所选中保险的id
+    choseInsurance(item) {
+      // console.log(value)   // change事件输出的是布尔值 但我们需要的是保险的id号 所以要把保险的信息项传递过来
+      // console.log(item)
+      // 获取到数组中的id所对应的索引  
+      let index = this.insurances.indexOf(item.id);
+      // 添加之前判断数组中是否存在了这个id 如果存在就先把它干掉再添加  
+      if (index > -1) {
+        this.insurances.splice(index, 1);
+      } else {
+        this.insurances.push(item.id);
+      }
+      // console.log(this.insurances)
     },
 
     // 发送手机验证码
