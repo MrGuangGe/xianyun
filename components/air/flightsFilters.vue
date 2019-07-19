@@ -96,7 +96,7 @@ export default {
         // 通过冒号切割与value值匹配的时间
         let [start] = val.dep_time.split(":");
         // 条件满足返回到一个新的数组
-        return from <= start && start < to;
+        return +from <= +start && +start < +to;
       });
       // 通过this.$emit来调用父组件传递过来的方法,顺便把过滤好的新数组传递给父组件
       this.$emit("changAirTicketList", newArr);
