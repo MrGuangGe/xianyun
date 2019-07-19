@@ -172,6 +172,44 @@ export default {
 
     // 提交订单
     handleSubmit() {
+      // 添加验证规则
+      const rules = {
+        users: {
+          value: this.users[0].username && this.users[0].id,
+          message: "乘机人的信息不能为空"
+        },
+        contactName: {
+          value: this.contactName,
+          message: "请输入您的名字"
+        },
+        contactPhone: {
+          value: this.contactPhone,
+          message: "请输入您的手机号"
+        },
+        captcha: {
+          value: this.captcha,
+          message: "请输入手机验证码"
+        }
+      };
+      let valid = true
+      // 循环遍历 一个一个地进行验证  
+      Object.keys(rules).forEach(val => {
+        // 有一项为空就立刻执行return停止
+        if(!valid) return
+        // 如果没有输入信息则会出现以下的弹框
+        if (!rules[val].value.trim()) {
+          valid = false
+          this.$message({
+            type: "warning",
+            message: rules[val].message
+          })
+          return
+        }
+      })
+
+      // 有一项为空就立刻执行return停止
+      if(!valid) return
+
       const data = {
         users: this.users,
         insurances: this.insurances,
@@ -180,22 +218,23 @@ export default {
         invoice: false,
         captcha: this.captcha,
         seat_xid: this.$route.query.seat_xid,
-        air: this.$route.query.id,
-      }
+        air: this.$route.query.id
+      };
       this.$axios({
         url: "/airorders",
         method: "POST",
         data,
         // 设置授权的头部信息
-        headers:{
-            Authorization:`Bearer ${this.$store.state.user.userInfo.token}`
+        headers: {
+          Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
         }
-      }).then(res=>{
-          console.log(res)
       })
-      .catch(err=>{
-          console.log(err)
-      })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };
