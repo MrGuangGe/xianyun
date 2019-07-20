@@ -11,7 +11,7 @@
           <span>{{data.org_airport_name}}{{data.org_airport_quay}}</span>
         </el-col>
         <el-col :span="14" class="flight-time">
-          <span>--- {{rankTime}} ---</span>
+          <span>--- {{distanceOfTime}} ---</span>
           <span>{{data.airline_name}}{{data.flight_no}}</span>
         </el-col>
         <el-col :span="5" class="flight-airport">
@@ -54,8 +54,30 @@ export default {
   },
 
   computed: {
-    rankTime() {
-      
+    distanceOfTime() {
+      // 如果请求没有回来返回一个空的字符串
+      if(!this.data.dep_time) return ""
+      // console.log(this.data);
+      // 20:30  ---  22:50
+      // 通过冒号将这样的时间22:50切割成字符串
+      const start = this.data.dep_time.split(":"); // 出发时间
+      const end = this.data.arr_time.split(":"); // 到达世间
+
+      // 计算间隔多少分钟
+      // + +end是为了隐式转换 否则字符串就会相连了
+      let arrTime = end[0] * 60 + +end[1];
+      let depTime = start[0] * 60 + +start[1];
+
+      // 第二天到达的话需要加上24小时 否则会出现负数
+      if (arrTime < depTime) {
+        arrTime += 24 * 60;
+      }
+
+      const distance = arrTime - depTime;
+      const hour = Math.floor(distance / 60);
+      const min = distance % 60;
+      // computed属性会return回一个字符串
+      return `${hour}时${min}分`;
     }
   }
 };
