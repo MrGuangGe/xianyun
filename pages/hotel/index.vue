@@ -10,7 +10,23 @@ export default {
     // 页面加载完成后执行
     window.onLoad = function() {
       // 生成地图 container是显示地图div的id
-      var map = new AMap.Map("container");
+      var map = new AMap.Map("container", {
+        zoom: 11, //级别
+        center: [116.397428, 39.90923], //中心点坐标，经纬度
+        viewMode: "3D" //使用3D视图
+      });
+
+      // 点标记
+      // 创建一个Marker实例
+      var marker = new AMap.Marker({
+        // position: new AMap.LngLat(116.397428, 39.90923), // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+        position: [116.397428, 39.90923], //位置，经纬度
+        title: "北京",
+        // 自定义点图标
+        content:
+          "<div style='width:20px;height: 20px;background-color: deeppink;border-radius: 50%;text-align: center;line-height: 20px;'>1</div>"
+      });
+      map.add(marker); //添加到地图
     };
 
     // 我申请的key
@@ -26,10 +42,18 @@ export default {
 </script>
 
 <style lang="less" scoped>
-#container{
+#container {
   width: 500px;
   height: 500px;
   margin: 50px;
+}
+.custom {
+  width: 20px;
+  height: 20px;
+  background-color: deeppink;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
 }
 </style>
 
