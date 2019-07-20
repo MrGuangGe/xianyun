@@ -28,6 +28,11 @@
 import QRCode from "qrcode";
 
 export default {
+  data() {
+    return {
+      timer: null
+    };
+  },
   mounted() {
     setTimeout(() => {
       this.$axios({
@@ -46,11 +51,56 @@ export default {
           let canvas = document.getElementById("qrcode-stage");
           // 生成二维码到canvas
           QRCode.toCanvas(canvas, code_url);
+
+          this.timer = setInterval(async () => {
+            // 调用付款状态查询的方法 并把请求回来的数据传递过去
+            const pay = await this.isPay(res.data);
+            if (pay) {
+              // 弹框
+              this.$message({
+                type: "success",
+                message: "支付完成"
+              });
+              // 清除定时器
+              clearInterval(this.timer);
+              return;
+            }
+          }, 3000);
         })
         .catch(err => {
           console.log(err);
         });
     }, 10);
+  },
+  methods: {
+    // 支付结果轮询
+    isPay(data) {
+      return this.$axios({
+        url: "/airorders/checkpay",
+        method: "POST",
+        data: {
+          id: data.id,
+          nonce_str: data.price,
+          out_trade_no: data.orderNo
+        },
+        // 设置授权的头部信息
+        headers: {
+          Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
+        }
+      })
+        .then(res => {
+          // console.log(res);
+          const { statusTxt } = res.data;
+          if (statusTxt === "支付完成") {
+            return true;
+          } else {
+            return false;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }
 };
 </script>
