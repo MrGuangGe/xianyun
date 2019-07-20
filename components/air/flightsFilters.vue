@@ -74,10 +74,39 @@ export default {
         { type: "大", size: "L" },
         { type: "中", size: "M" },
         { type: "小", size: "S" }
-      ]
+      ],
+      // 过滤条件的列表
+      moreToFilters: {
+        company: { value: "", key: "airline_name" },
+        airSize: { value: "", key: "plane_size" }
+      }
     };
   },
   methods: {
+    // 封装一个函数进行多条件的筛选
+    handleMoreFilters() {
+      var arr = this.data.flights.filter(val => {
+
+        // 定义一个验证的变量初始值
+          let pass = true;
+
+        // 循环过滤多条件的数组
+        Object.keys(this.moreToFilters).forEach(item => {
+          // 如果这个过滤条件的value值为空 直接退出循环
+          if (!this.moreToFilters[item].value) return;
+
+          // 如果过滤条件的value值不等于循环flights后的可以值 返回false
+          if (this.moreToFilters[item].value !== val[this.moreToFilters[item].key]) {
+            pass = false
+          }
+        });
+          // 把结果return出去
+          return pass
+      });
+
+      // 把得到的新数组return出去
+      return arr
+    },
     // 选择机场时候触发
     handleAirport(value) {
       let newArr = this.data.flights.filter(val => {
@@ -104,20 +133,32 @@ export default {
 
     // 选择航空公司时候触发
     handleCompany(value) {
-      let newArr = this.data.flights.filter(val => {
-        // 条件满足返回到一个新的数组
-        return val.airline_name === value;
-      });
+      // let newArr = this.data.flights.filter(val => {
+      //   // 条件满足返回到一个新的数组
+      //   // return val.airline_name === value;
+      // });
+
+      // 实现多条件筛选
+      // 1.把value值保存下来
+      this.moreToFilters.company.value = value;
+      const newArr = this.handleMoreFilters()
+
       // 通过this.$emit来调用父组件传递过来的方法,顺便把过滤好的新数组传递给父组件
       this.$emit("changAirTicketList", newArr);
     },
 
     // 选择机型时候触发
     handleAirSize(value) {
-      let newArr = this.data.flights.filter(val => {
-        // 条件满足返回到一个新的数组
-        return val.plane_size === value;
-      });
+      // let newArr = this.data.flights.filter(val => {
+      //   // 条件满足返回到一个新的数组
+      //   // return val.plane_size === value;
+      // });
+
+      // 实现多条件筛选
+      // 1.把value值保存下来
+      this.moreToFilters.airSize.value = value;
+      const newArr = this.handleMoreFilters()
+
       // 通过this.$emit来调用父组件传递过来的方法,顺便把过滤好的新数组传递给父组件
       this.$emit("changAirTicketList", newArr);
     },
