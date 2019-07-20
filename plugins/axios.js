@@ -19,6 +19,7 @@ export default ({ $axios, redirect }) => {
         if (statusCode === 400) {
             // 错误的提示信息
             Message.warning({ message })
+            return
         }
     })
 }

@@ -239,7 +239,14 @@ export default {
         }
       })
         .then(res => {
-          console.log(res);
+          // console.log(res);
+          // 跳转到支付页面 并把机票的id给传递过去
+          this.$router.push({
+            path:"/air/pay",
+            query:{
+              id: res.data.data.id
+            }
+          })
         })
         .catch(err => {
           console.log(err);
