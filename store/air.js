@@ -4,7 +4,9 @@ export const state = () => {
         // 机票信息
         ticketData: {
             seat_infos: {}
-        }
+        },
+        // 计算总价
+        totalPrice: 9999
     }
 }
 
@@ -12,6 +14,9 @@ export const state = () => {
 export const mutations = {
     setTicketData(state, data) {
         state.ticketData = data
+    },
+    setTotalPrice(state, data) {
+        state.totalPrice = data
     }
 }
 

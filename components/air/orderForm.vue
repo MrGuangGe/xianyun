@@ -63,6 +63,9 @@
         <el-button type="success" class="submit" @click="handleSubmit">提交订单</el-button>
       </div>
     </div>
+
+    <!-- 要使用computed里面的属性 它才会被调用并实时更新 -->
+    <input type="hidden" :value="totalPrice">
   </div>
 </template>
 
@@ -241,6 +244,27 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    }
+  },
+  computed: {
+    // 计算总价
+    totalPrice() {
+      // 如果请求没有回来返回空
+      if(!this.ticketData.airport_tax_audlet) return ""
+      // 定义一个总价的基数
+      let price = 0;
+      // 单价
+      price += this.ticketData.seat_infos.par_price
+      // 基建燃油费
+      price += this.ticketData.airport_tax_audlet
+      // 保险
+      price += this.insurances.length * 30
+      // 人数
+      price *= this.users.length
+      // 调用仓库中的方法 并把总价传递过去进行数据的状态管理
+      this.$store.commit("air/setTotalPrice", price)
+      // computed属性必须返回一个东西（字符串）
+      return price
     }
   }
 };
