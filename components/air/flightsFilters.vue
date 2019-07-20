@@ -109,31 +109,31 @@ export default {
     },
     // 选择机场时候触发
     handleAirport(value) {
-      let newArr = this.data.flights.filter(val => {
+      let arr = this.data.flights.filter(val => {
         // 条件满足返回到一个新的数组
         return val.org_airport_name === value;
       });
       // 通过this.$emit来调用父组件传递过来的方法,顺便把过滤好的新数组传递给父组件
-      this.$emit("changAirTicketList", newArr);
+      this.$emit("changAirTicketList", arr);
     },
 
     // 选择出发时间时候触发
     handleFlightTimes(value) {
       // 通过都好切割这样的时间  6,12
       let [from, to] = value.split(",");
-      let newArr = this.data.flights.filter(val => {
+      let arr = this.data.flights.filter(val => {
         // 通过冒号切割与value值匹配的时间
         let [start] = val.dep_time.split(":");
         // 条件满足返回到一个新的数组
         return +from <= +start && +start < +to;
       });
       // 通过this.$emit来调用父组件传递过来的方法,顺便把过滤好的新数组传递给父组件
-      this.$emit("changAirTicketList", newArr);
+      this.$emit("changAirTicketList", arr);
     },
 
     // 选择航空公司时候触发
     handleCompany(value) {
-      // let newArr = this.data.flights.filter(val => {
+      // let arr = this.data.flights.filter(val => {
       //   // 条件满足返回到一个新的数组
       //   // return val.airline_name === value;
       // });
@@ -141,15 +141,15 @@ export default {
       // 实现多条件筛选
       // 1.把value值保存下来
       this.moreToFilters.company.value = value;
-      const newArr = this.handleMoreFilters()
+      const arr = this.handleMoreFilters()
 
       // 通过this.$emit来调用父组件传递过来的方法,顺便把过滤好的新数组传递给父组件
-      this.$emit("changAirTicketList", newArr);
+      this.$emit("changAirTicketList", arr);
     },
 
     // 选择机型时候触发
     handleAirSize(value) {
-      // let newArr = this.data.flights.filter(val => {
+      // let arr = this.data.flights.filter(val => {
       //   // 条件满足返回到一个新的数组
       //   // return val.plane_size === value;
       // });
@@ -157,10 +157,10 @@ export default {
       // 实现多条件筛选
       // 1.把value值保存下来
       this.moreToFilters.airSize.value = value;
-      const newArr = this.handleMoreFilters()
+      const arr = this.handleMoreFilters()
 
       // 通过this.$emit来调用父组件传递过来的方法,顺便把过滤好的新数组传递给父组件
-      this.$emit("changAirTicketList", newArr);
+      this.$emit("changAirTicketList", arr);
     },
 
     // 撤销条件时候触发
