@@ -1,25 +1,25 @@
 <template>
   <div class="main">
     <!-- 酒店详情 -->
-    <el-row class="hotel" v-for="(item,index) in hotelInfoList" :key="index">
+    <el-row class="hotel">
       <el-col class="hotel-left" :span="7">
-        <img :src="`${item.photos}`" alt />
+        <img :src="`${data.photos}`" alt />
       </el-col>
       <el-col class="hotel-middle" :span="10">
-        <h4 class="hotel-middle-title">{{item.name}}</h4>
+        <h4 class="hotel-middle-title">{{data.name}}</h4>
         <div class="hotel-middle-type">
-          <span>{{item.alias}}</span>
+          <span>{{data.alias}}</span>
           <span>
             <i class="iconfont iconhuangguan"></i>
             <i class="iconfont iconhuangguan"></i>
             <i class="iconfont iconhuangguan"></i>
-            {{item.hoteltype.name}}
+            {{data.hoteltype.name}}
           </span>
         </div>
         <div class="hotel-middle-comment">
           <div class="hotel-middle-comment-l">
             <el-rate
-              v-model="item.stars"
+              v-model="data.stars"
               disabled
               show-score
               text-color="#ff9900"
@@ -27,21 +27,21 @@
             ></el-rate>
           </div>
           <div class="hotel-middle-comment-m">
-            <span class="spanColor">{{item.all_remarks}}</span>条评价
+            <span class="spanColor">{{data.all_remarks}}</span>条评价
           </div>
           <div class="hotel-middle-comment-r">
-            <span class="spanColor">{{item.roomCount}}</span>篇游记
+            <span class="spanColor">{{data.roomCount}}</span>篇游记
           </div>
         </div>
         <div class="hotel-middle-position clearfix">
           <i class="iconfont iconlocation"></i>
-          位于: {{item.address}}
+          位于: {{data.address}}
         </div>
       </el-col>
       <el-col class="hotel-right" :span="7">
         <table>
           <tbody>
-            <tr class="hotel-right-tr" v-for="(v,i) in item.products" :key="i">
+            <tr class="hotel-right-tr" v-for="(v,i) in data.products" :key="i">
               <td>{{v.name}}</td>
               <td style="padding-left:22px;">
                 <span class="spanColor">￥{{v.price}}</span>起
@@ -57,24 +57,11 @@
 
 <script>
 export default {
-  data() {
-    return {
-      hotelInfoList: []
+  props: {
+    data: {
+      type: Object,
+      default: {}
     }
-  },
-  mounted() {
-    // 获取所有酒店的信息
-    this.$axios({
-      url: "/hotels",
-      method: "GET"
-    })
-      .then(res => {
-        // console.log(res.data,111)
-        this.hotelInfoList = res.data.data;
-      })
-      .catch(err => {
-        console.log(err);
-      });
   }
 };
 </script>
@@ -148,6 +135,9 @@ export default {
   *zoom: 1; /* IE6、7 专有 */
 }
 .spanColor {
+  color: orange;
+}
+.iconhuangguan {
   color: orange;
 }
 </style>
