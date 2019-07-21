@@ -139,65 +139,48 @@
       </div>
 
       <!-- 酒店详情 -->
-      <el-row class="hotel">
+      <el-row class="hotel" v-for="(item,index) in hotelInfoList" :key="index">
         <el-col class="hotel-left" :span="7">
-          <img
-            src="https://p1.meituan.net/hotel/4ccddfdeac040ffa12e77bbc88037d47103677.jpg%40700w_700h_0e_1l%7Cwatermark%3D1%26%26r%3D1%26p%3D9%26x%3D2%26y%3D2%26relative%3D1%26o%3D20"
-            alt
-          />
+          <img :src="`${item.photos}`" alt />
         </el-col>
         <el-col class="hotel-middle" :span="10">
-          <h4 class="hotel-middle-title">好来阁商务宾馆</h4>
+          <h4 class="hotel-middle-title">{{item.name}}</h4>
           <div class="hotel-middle-type">
-            <span>hao lai ge shang wu hotel</span>
+            <span>{{item.alias}}</span>
             <span>
               <i class="iconfont iconhuangguan"></i>
               <i class="iconfont iconhuangguan"></i>
-              <i class="iconfont iconhuangguan"></i>经济型
+              <i class="iconfont iconhuangguan"></i>{{item.hoteltype.name}}
             </span>
           </div>
           <div class="hotel-middle-comment">
             <div class="hotel-middle-comment-l">
               <el-rate
                 v-model="xingxingValue"
-                disabled="true"
-                show-score="true"
+                disabled
+                show-score
                 text-color="#ff9900"
-                score-template="3.5分"
+                score-template="{value}分"
               ></el-rate>
             </div>
             <div class="hotel-middle-comment-m">
-              <span class="spanColor">9</span>条评价
+              <span class="spanColor">{{item.all_remarks}}</span>条评价
             </div>
             <div class="hotel-middle-comment-r">
-              <span class="spanColor">99</span>篇游记
+              <span class="spanColor">{{item.roomCount}}</span>篇游记
             </div>
           </div>
           <div class="hotel-middle-position clearfix">
-            <i class="iconfont iconlocation"></i>位于: 高淳县淳溪镇镇兴路118号(高淳县委党校对面)
+            <i class="iconfont iconlocation"></i>位于: {{item.address}}
           </div>
         </el-col>
         <el-col class="hotel-right" :span="7">
           <table>
             <tbody>
-              <tr class="hotel-right-tr">
-                <td>携程</td>
+              <tr class="hotel-right-tr" v-for="(v,i) in item.products" :key="i">
+                <td>{{v.name}}</td>
                 <td style="padding-left:22px;">
-                  <span class="spanColor">￥111</span>起
-                  <i class="el-icon-arrow-right"></i>
-                </td>
-              </tr>
-              <tr class="hotel-right-tr">
-                <td>艺龙</td>
-                <td style="padding-left:22px">
-                  <span class="spanColor">￥111</span>起
-                  <i class="el-icon-arrow-right"></i>
-                </td>
-              </tr>
-              <tr class="hotel-right-tr">
-                <td>Hotels.com</td>
-                <td style="padding-left:22px">
-                  <span class="spanColor">￥111</span>起
+                  <span class="spanColor">￥{{v.price}}</span>起
                   <i class="el-icon-arrow-right"></i>
                 </td>
               </tr>
@@ -214,10 +197,25 @@ export default {
   data() {
     return {
       elSlideValue: 100,
-      xingxingValue: 3.5
+      xingxingValue: 0,
+      // 酒店详情
+      hotelInfoList:[]
     };
   },
   mounted() {
+    this.$axios({
+      url: "/hotels",
+      method: "GET"
+    })
+      .then(res => {
+        console.log(res.data);
+        this.hotelInfoList = res.data.data
+        res.data.data.map(val => this.xingxingValue = val.stars)
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
     // 页面加载完成后执行
     window.onLoad = function() {
       // 生成地图 container是显示地图div的id
@@ -282,8 +280,6 @@ export default {
     height: 100%;
     float: left;
     color: rgb(100, 99, 99);
-    .second-introduce-top {
-    }
     .second-introduce-middle {
       margin: 22px 0;
     }
